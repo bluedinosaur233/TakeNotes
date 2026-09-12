@@ -51,13 +51,8 @@ src/app/notes/        笔记列表、详情及表单
 src/app/_components/  全局共享组件
 src/lib/              Prisma Client 等服务端工具
 prisma/               数据模型和数据库迁移
-LEARNING.md           开发过程与知识点记录
 ```
 
 ## 数据库
 
 开发环境使用项目根目录的 SQLite 数据库 `dev.db`。数据库文件和环境变量不会提交到 Git；仓库提供 `.env.example` 作为配置示例。
-
-## 学习记录
-
-项目实现过程中的模块拆解、核心代码、设计原因和验证记录见 [LEARNING.md](./LEARNING.md)。

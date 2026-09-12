@@ -23,12 +23,6 @@ export function SiteHeader() {
           >
             学习笔记
           </Link>
-          <Link
-            href="/#roadmap"
-            className="rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950"
-          >
-            项目设计
-          </Link>
         </nav>
       </div>
     </header>
