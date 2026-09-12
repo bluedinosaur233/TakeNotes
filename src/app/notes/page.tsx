@@ -79,17 +79,17 @@ export default async function NotesPage({ searchParams }: NotesPageProps) {
     <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-6 py-12 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-semibold text-blue-600">NOTES</p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+          <p className="accent-text text-sm font-semibold">NOTES</p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#37352f] sm:text-4xl">
             学习笔记
           </h1>
-          <p className="mt-3 text-slate-600">
+          <p className="mt-3 text-gray-600">
             共 {totalCount} 条结果，每页显示 {PAGE_SIZE} 条。
           </p>
         </div>
         <Link
           href="/notes/new"
-          className="inline-flex min-h-11 items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+          className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#37352f] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#2f2f2f] active:bg-[#1f1f1f]"
         >
           新增笔记
         </Link>
@@ -98,15 +98,15 @@ export default async function NotesPage({ searchParams }: NotesPageProps) {
       <SearchForm query={query} tag={tag} tags={allTags} />
 
       {notes.length === 0 ? (
-        <section className="mt-6 flex min-h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
-          <h2 className="text-xl font-bold text-slate-900">
+        <section className="mt-6 flex min-h-64 flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white px-6 py-12 text-center">
+          <h2 className="text-xl font-semibold text-[#37352f]">
             {query || tag ? "没有匹配的笔记" : "还没有笔记数据"}
           </h2>
-          <p className="mt-2 text-slate-600">
+          <p className="mt-2 text-gray-600">
             {query || tag ? "试试其他关键词或清除筛选条件。" : "下一步通过表单创建第一条学习笔记。"}
           </p>
           {query || tag ? (
-            <Link href="/notes" className="mt-5 font-semibold text-blue-600 hover:text-blue-700">
+            <Link href="/notes" className="mt-5 font-medium text-[#787774] hover:text-[#37352f]">
               清除筛选
             </Link>
           ) : null}

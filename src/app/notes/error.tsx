@@ -16,12 +16,12 @@ export default function NotesError({
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-6 py-20 text-center lg:px-8">
       <p className="text-sm font-semibold text-red-600">ERROR</p>
-      <h1 className="mt-3 text-3xl font-bold text-slate-950">笔记加载失败</h1>
-      <p className="mt-3 text-slate-600">暂时无法读取笔记，请稍后再试。</p>
+      <h1 className="mt-3 text-3xl font-bold text-[#37352f]">笔记加载失败</h1>
+      <p className="mt-3 text-gray-600">暂时无法读取笔记，请稍后再试。</p>
       <button
         type="button"
         onClick={() => reset()}
-        className="mt-7 rounded-lg bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700"
+        className="mt-7 rounded-md bg-[#37352f] px-5 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#2f2f2f]"
       >
         重新加载
       </button>

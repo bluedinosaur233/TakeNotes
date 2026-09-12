@@ -24,18 +24,18 @@ export function Pagination({ page, totalPages, query, tag }: PaginationProps) {
       {page > 1 ? (
         <Link
           href={pageHref(page - 1, query, tag)}
-          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-white"
+          className="rounded-md border border-gray-200 bg-transparent px-4 py-2 text-sm font-medium text-gray-700 transition-colors duration-150 hover:bg-[#efedea] active:bg-[#e3e1db]"
         >
           上一页
         </Link>
       ) : null}
-      <span className="px-3 text-sm text-slate-500">
+      <span className="px-3 text-sm text-gray-500">
         第 {page} / {totalPages} 页
       </span>
       {page < totalPages ? (
         <Link
           href={pageHref(page + 1, query, tag)}
-          className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-white"
+          className="rounded-md border border-gray-200 bg-transparent px-4 py-2 text-sm font-medium text-gray-700 transition-colors duration-150 hover:bg-[#efedea] active:bg-[#e3e1db]"
         >
           下一页
         </Link>
