@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type AccentName = "stone" | "blue" | "green" | "amber" | "rose" | "purple";
 
@@ -18,6 +18,8 @@ const accents: Array<{ name: AccentName; label: string; color: string }> = [
 export function ThemeColorPicker() {
   const [accent, setAccent] = useState<AccentName>("stone");
   const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const savedAccent = window.localStorage.getItem(STORAGE_KEY) as AccentName | null;
@@ -33,6 +35,31 @@ export function ThemeColorPicker() {
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+
+    function closeWhenOutside(event: PointerEvent) {
+      if (!containerRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    function closeWithEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
+    }
+
+    document.addEventListener("pointerdown", closeWhenOutside);
+    document.addEventListener("keydown", closeWithEscape);
+
+    return () => {
+      document.removeEventListener("pointerdown", closeWhenOutside);
+      document.removeEventListener("keydown", closeWithEscape);
+    };
+  }, [open]);
+
   function chooseAccent(nextAccent: AccentName) {
     setAccent(nextAccent);
     document.documentElement.setAttribute("data-accent", nextAccent);
@@ -43,8 +70,9 @@ export function ThemeColorPicker() {
   const currentAccent = accents.find((item) => item.name === accent) ?? accents[0];
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((value) => !value)}
         aria-label="选择主题色"

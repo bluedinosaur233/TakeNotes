@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
-import rehypeSanitize from "rehype-sanitize";
-import remarkGfm from "remark-gfm";
+import { MarkdownRenderer } from "./markdown-renderer";
 
 type MarkdownEditorProps = {
   defaultValue?: string;
@@ -67,14 +65,7 @@ export function MarkdownEditor({
         {mode === "preview" ? (
           <div className="min-h-80 px-4 py-3">
             {content.trim() ? (
-              <div className="markdown-body">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeSanitize]}
-                >
-                  {content}
-                </ReactMarkdown>
-              </div>
+              <MarkdownRenderer content={content} />
             ) : (
               <p className="text-gray-400">还没有内容，切换到编辑模式开始输入。</p>
             )}

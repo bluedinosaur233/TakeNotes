@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { DeleteButton } from "../_components/delete-button";
 import { MarkdownRenderer } from "../_components/markdown-renderer";
+import { NoteOutline } from "../_components/note-outline";
 
 type NoteDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -41,14 +42,18 @@ export default async function NoteDetailPage({
     .filter(Boolean);
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-6 py-12 lg:px-8">
-      <Link
-        href="/notes"
-        className="text-sm font-medium text-[#787774] hover:text-[#37352f]"
-      >
-        ← 返回笔记列表
-      </Link>
-      <article className="mt-8 rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:p-10">
+    <main className="note-detail-main mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-12 lg:px-8">
+      <div className="note-back-link mx-auto w-full max-w-3xl">
+        <Link
+          href="/notes"
+          className="text-sm font-medium text-[#787774] hover:text-[#37352f]"
+        >
+          ← 返回笔记列表
+        </Link>
+      </div>
+      <div className="note-reading-shell">
+        <NoteOutline key={note.id + note.updatedAt.toISOString()} bodyId="note-body" />
+        <article className="note-article rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:p-10">
         <header className="border-b border-gray-200 pb-6">
           <p className="accent-text text-sm font-semibold">LEARNING NOTE</p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-[#37352f] sm:text-4xl">
@@ -68,7 +73,9 @@ export default async function NoteDetailPage({
             ))}
           </div>
         </header>
-        <MarkdownRenderer content={note.content} />
+        <div id="note-body" className="mt-8 min-w-0">
+          <MarkdownRenderer content={note.content} />
+        </div>
         <div className="mt-10 flex gap-3 border-t border-gray-200 pt-6">
           <Link
             href={`/notes/${note.id}/edit`}
@@ -78,7 +85,8 @@ export default async function NoteDetailPage({
           </Link>
           <DeleteButton id={note.id} />
         </div>
-      </article>
+        </article>
+      </div>
     </main>
   );
 }
