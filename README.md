@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TakeNotes
 
-## Getting Started
+TakeNotes 是一个使用 Next.js App Router 构建的个人学习知识库，用于记录、整理和回顾学习笔记。
 
-First, run the development server:
+## 当前功能
+
+- 笔记列表、详情、创建、编辑和删除
+- 标题、正文和标签管理
+- 关键词搜索、标签筛选和分页
+- Server Actions 服务端写入与表单校验
+- loading、error、not-found 和提交 pending 状态
+- 基础响应式页面和动态 Metadata
+
+## 技术栈
+
+- Next.js 16（App Router）
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- Prisma 7
+- SQLite
+- pnpm
+
+## 本地运行
+
+环境要求：Node.js 20+、pnpm。
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.example .env
+pnpm prisma migrate dev
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 <http://localhost:3000>。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+常用命令：
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm lint
+pnpm build
+pnpm db:validate
+pnpm db:studio
+```
 
-## Learn More
+## 项目结构
 
-To learn more about Next.js, take a look at the following resources:
+```text
+src/app/              页面、路由和 Server Actions
+src/app/notes/        笔记列表、详情及表单
+src/app/_components/  全局共享组件
+src/lib/              Prisma Client 等服务端工具
+prisma/               数据模型和数据库迁移
+LEARNING.md           开发过程与知识点记录
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 数据库
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+开发环境使用项目根目录的 SQLite 数据库 `dev.db`。数据库文件和环境变量不会提交到 Git；仓库提供 `.env.example` 作为配置示例。
 
-## Deploy on Vercel
+## 学习记录
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+项目实现过程中的模块拆解、核心代码、设计原因和验证记录见 [LEARNING.md](./LEARNING.md)。
