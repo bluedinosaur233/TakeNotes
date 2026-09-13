@@ -93,12 +93,11 @@ export function NoteOutline({ bodyId }: { bodyId: string }) {
   }, [bodyId, open]);
 
   useEffect(() => {
-    const body = document.getElementById(bodyId);
-    const headings = Array.from(
-      body?.querySelectorAll<HTMLElement>(
-        "h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]",
-      ) ?? [],
-    );
+    const selector = "h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]";
+    let headings: HTMLElement[] = [];
+    let frame: number | null = null;
+    let observer: MutationObserver | null = null;
+    let giveUpTimer: number | null = null;
 
     function updateActive() {
       let current = headings[0];
@@ -111,7 +110,7 @@ export function NoteOutline({ bodyId }: { bodyId: string }) {
 
     function syncOutlineToBody() {
       const list = listRef.current;
-      if (!body || !list || !openRef.current || syncLockRef.current === "outline") {
+      if (!list || !openRef.current || syncLockRef.current === "outline") {
         return;
       }
 
@@ -122,7 +121,16 @@ export function NoteOutline({ bodyId }: { bodyId: string }) {
       list.scrollTop = getDocumentScrollProgress() * maxListScroll;
     }
 
-    let frame = requestAnimationFrame(() => {
+    function stopWatching() {
+      observer?.disconnect();
+      observer = null;
+      if (giveUpTimer !== null) {
+        window.clearTimeout(giveUpTimer);
+        giveUpTimer = null;
+      }
+    }
+
+    function publish() {
       setItems(
         headings.map((element) => ({
           id: element.id,
@@ -132,11 +140,41 @@ export function NoteOutline({ bodyId }: { bodyId: string }) {
       );
       updateActive();
       syncOutlineToBody();
-    });
+    }
+
+    function scan() {
+      const body = document.getElementById(bodyId);
+      const found = Array.from(
+        body?.querySelectorAll<HTMLElement>(selector) ?? [],
+      );
+      if (found.length === 0) return false;
+
+      headings = found;
+      stopWatching();
+      publish();
+      return true;
+    }
+
+    function scheduleScan() {
+      if (frame !== null) return;
+      frame = requestAnimationFrame(() => {
+        frame = null;
+        scan();
+      });
+    }
+
+    // 详情页正文可能是流式渲染后才进入文档的，此时首帧查不到标题。
+    // 因此标题出现之前持续观察 DOM，而不是只查一次就放弃。
+    if (!scan()) {
+      observer = new MutationObserver(scheduleScan);
+      observer.observe(document.body, { childList: true, subtree: true });
+      giveUpTimer = window.setTimeout(stopWatching, 15000);
+    }
 
     function onScroll() {
-      cancelAnimationFrame(frame);
+      if (frame !== null) cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
+        frame = null;
         updateActive();
         syncOutlineToBody();
       });
@@ -144,7 +182,8 @@ export function NoteOutline({ bodyId }: { bodyId: string }) {
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     return () => {
-      cancelAnimationFrame(frame);
+      stopWatching();
+      if (frame !== null) cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };

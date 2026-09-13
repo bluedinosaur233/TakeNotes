@@ -1,7 +1,16 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useState } from "react";
-import { MarkdownRenderer } from "./markdown-renderer";
+
+// Markdown 解析器体积较大，只有切到预览时才需要，因此拆成异步 chunk 按需加载。
+const MarkdownRenderer = dynamic(
+  () => import("./markdown-renderer").then((mod) => mod.MarkdownRenderer),
+  {
+    ssr: false,
+    loading: () => <p className="text-sm text-gray-400">正在加载预览…</p>,
+  },
+);
 
 type MarkdownEditorProps = {
   defaultValue?: string;
