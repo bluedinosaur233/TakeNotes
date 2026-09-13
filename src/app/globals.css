@@ -76,7 +76,8 @@ body {
 }
 
 [data-theme="dark"] .bg-\[\#efedea\],
-[data-theme="dark"] .bg-\[\#e3e1db\] {
+[data-theme="dark"] .bg-\[\#e3e1db\],
+[data-theme="dark"] .bg-\[\#f1f0ed\] {
   background-color: #363633;
 }
 
@@ -98,7 +99,8 @@ body {
 [data-theme="dark"] .text-slate-600,
 [data-theme="dark"] .text-slate-500,
 [data-theme="dark"] .text-gray-400,
-[data-theme="dark"] .text-slate-400 {
+[data-theme="dark"] .text-slate-400,
+[data-theme="dark"] .text-\[\#787774\] {
   color: var(--muted);
 }
 
