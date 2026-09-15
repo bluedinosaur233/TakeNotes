@@ -34,11 +34,12 @@ yarn-error.log*
 .env*
 !.env.example
 
-# local SQLite database
-/dev.db
-/dev.db-journal
-/prisma/dev.db
-/prisma/dev.db-journal
+# local SQLite databases, exported backups and sidecar files
+*.db
+*.db-*
+/data/
+/backups/
+.env.docker
 
 # local learning notes
 /LEARNING.md

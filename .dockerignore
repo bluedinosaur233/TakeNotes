@@ -1,0 +1,16 @@
+node_modules
+.next
+.git
+.env*
+dev.db*
+prisma/dev.db*
+data
+backups
+*.db
+*.db-*
+LEARNING.md
+tests
+docs
+*.tsbuildinfo
+src/generated
+.DS_Store

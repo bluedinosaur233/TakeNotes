@@ -15,3 +15,33 @@ model Note {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// 单实例只有一位管理员，无公开注册；旧笔记无需迁移归属。
+model AdminSession {
+  id                String   @id @default(cuid())
+  credentialVersion String
+  expiresAt         DateTime
+  createdAt         DateTime @default(now())
+  @@index([expiresAt])
+}
+
+model QaHistory {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String   @default("")
+  sources   String   @default("[]")
+  keywords  String   @default("[]")
+  status    String   @default("generating")
+  error     String   @default("")
+  truncated Boolean  @default(false)
+  model     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([createdAt])
+}
+
+// 固定窗口计数与请求租约保存在 SQLite，进程重启不会重置限额。
+model RequestBudget {
+  key   String @id
+  count Int    @default(0)
+}

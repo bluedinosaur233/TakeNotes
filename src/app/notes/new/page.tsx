@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { NoteForm } from "../_components/note-form";
+import { requireAdmin } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
   title: "新增笔记",
   description: "创建一条新的学习笔记。",
 };
 
-export default function NewNotePage() {
+export default async function NewNotePage() {
+  await requireAdmin();
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-6 py-12 lg:px-8">
       <Link href="/notes" className="text-sm font-medium text-[#787774] hover:text-[#37352f]">

@@ -1,0 +1,20 @@
+# 额外启用 Caddy HTTPS：域名已解析到服务器，80/443 端口可达。
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      TAKENOTES_DOMAIN: ${TAKENOTES_DOMAIN:?请在 .env.docker 中设置 TAKENOTES_DOMAIN}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+volumes:
+  caddy_data:
+  caddy_config:

@@ -1,8 +1,10 @@
 "use server";
+//增 删 改
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth/session";
 
 export type CreateNoteState = {
   errors?: {
@@ -28,6 +30,7 @@ export async function createNote(
   _previousState: CreateNoteState,
   formData: FormData,
 ): Promise<CreateNoteState> {
+  await requireAdmin();
   const title = getFieldValue(formData, "title");
   const content = getFieldValue(formData, "content");
   const tags = getFieldValue(formData, "tags");
@@ -66,6 +69,7 @@ export async function updateNote(
   _previousState: CreateNoteState,
   formData: FormData,
 ): Promise<CreateNoteState> {
+  await requireAdmin();
   const id = getFieldValue(formData, "id");
   const title = getFieldValue(formData, "title");
   const content = getFieldValue(formData, "content");
@@ -93,6 +97,7 @@ export async function updateNote(
 }
 
 export async function deleteNote(formData: FormData) {
+  await requireAdmin();
   const id = getFieldValue(formData, "id");
   if (!id) throw new Error("缺少笔记 ID，无法删除。");
   await prisma.note.delete({ where: { id } });

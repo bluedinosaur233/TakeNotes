@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth/session";
 import { updateNote } from "../../actions";
 import { NoteForm } from "../../_components/note-form";
 
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default async function EditNotePage({ params }: EditNotePageProps) {
+  await requireAdmin();
   await connection();
   const { id } = await params;
   const note = await prisma.note.findUnique({ where: { id } });

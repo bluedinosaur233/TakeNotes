@@ -3,17 +3,20 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/auth/session";
 import { DeleteButton } from "../_components/delete-button";
 import { MarkdownRenderer } from "../_components/markdown-renderer";
 import { NoteOutline } from "../_components/note-outline";
 
 type NoteDetailPageProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ from?: string | string[]; history?: string | string[] }>;
 };
 
 export async function generateMetadata({
   params,
 }: NoteDetailPageProps): Promise<Metadata> {
+  await requireAdmin();
   await connection();
   const { id } = await params;
   const note = await prisma.note.findUnique({ where: { id } });
@@ -26,9 +29,14 @@ export async function generateMetadata({
 
 export default async function NoteDetailPage({
   params,
+  searchParams,
 }: NoteDetailPageProps) {
+  await requireAdmin();
   await connection();
   const { id } = await params;
+  const query = await searchParams;
+  const fromAsk = query.from === "ask";
+  const historyId = typeof query.history === "string" && /^[a-zA-Z0-9_-]{1,128}$/.test(query.history) ? query.history : null;
   const note = await prisma.note.findUnique({ where: { id } });
 
   if (!note) {
@@ -43,7 +51,12 @@ export default async function NoteDetailPage({
 
   return (
     <main className="note-detail-main mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-12 lg:px-8">
-      <div className="note-back-link mx-auto w-full max-w-3xl">
+      <div className="note-back-link mx-auto flex w-full max-w-3xl flex-wrap gap-5">
+        {fromAsk && (
+          <Link href={historyId ? `/ask/history/${historyId}` : "/ask"} className="text-sm font-medium text-[#787774] hover:text-[#37352f]">
+            {historyId ? "← 返回历史回答" : "← 返回本次问答"}
+          </Link>
+        )}
         <Link
           href="/notes"
           className="text-sm font-medium text-[#787774] hover:text-[#37352f]"

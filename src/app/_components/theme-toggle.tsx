@@ -27,9 +27,9 @@ export function ThemeToggle() {
 
   function toggleTheme() {
     const nextTheme: Theme = theme === "light" ? "dark" : "light";
-    setTheme(nextTheme);
-    document.documentElement.dataset.theme = nextTheme;
-    window.localStorage.setItem(STORAGE_KEY, nextTheme);
+    setTheme(nextTheme);//更新状态
+    document.documentElement.dataset.theme = nextTheme;//修改页面根元素
+    window.localStorage.setItem(STORAGE_KEY, nextTheme);//把选择保存在localStorage
   }
 
   return (

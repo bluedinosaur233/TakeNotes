@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "dotenv/config";//让.env里的配置进入环境变量，使process.env能够读取
 import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 // 种子脚本在 Next 之外运行，因此使用相对路径而不是 @ 别名。
 import { PrismaClient } from "../src/generated/prisma/client";
@@ -15,9 +15,12 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
-  // 用 upsert 而不是 create，脚本重复执行也不会产生重复记录。
+
+  //transaction：要么全部成功要么全部撤销（原子性）
   await prisma.$transaction(
     seedNotes.map((note) =>
+      //upsert:找到就更新，找不到就创建
+      // 用 upsert 而不是 create，脚本重复执行也不会产生重复记录。
       prisma.note.upsert({
         where: { id: note.id },
         update: {

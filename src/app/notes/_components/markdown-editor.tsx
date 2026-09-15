@@ -7,8 +7,8 @@ import { useState } from "react";
 const MarkdownRenderer = dynamic(
   () => import("./markdown-renderer").then((mod) => mod.MarkdownRenderer),
   {
-    ssr: false,
-    loading: () => <p className="text-sm text-gray-400">正在加载预览…</p>,
+    ssr: false,//关闭服务端渲染
+    loading: () => <p className="text-sm text-gray-400">正在加载预览…</p>,//加载展示文本
   },
 );
 
